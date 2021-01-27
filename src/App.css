@@ -1,0 +1,14 @@
+.title {
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.cv-block {
+  width: 70%;
+  min-height: 500px;
+  border: 1px solid black;
+}
