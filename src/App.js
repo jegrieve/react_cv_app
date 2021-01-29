@@ -8,16 +8,34 @@ import GeneralInfo from './components/generalInfo';
 class App extends Component {
   constructor() {
     super();
-
     this.state = {
-      generalInfo: [],
-      experienceInfo: [],
-      educationalInfo: [],
-      generalInfoForm: true,
-      experienceInfoForm: true,
-      educationalInfoForm: true,
+      generalInfo: { firstName: '', lastName: '', email: '', phoneNumber: '' },
+      generalInfoSubmitted: false,
     };
   }
+
+  updateInfo = (e) => {
+    let stateCopy = JSON.parse(JSON.stringify(this.state));
+
+    this.setState(function (state) {
+      switch (e.target.id) {
+        case 'first-name':
+          stateCopy.generalInfo['firstName'] = e.target.value;
+          return stateCopy;
+        case 'last-name':
+          stateCopy.generalInfo['lastName'] = e.target.value;
+          return stateCopy;
+        case 'email':
+          stateCopy.generalInfo['email'] = e.target.value;
+          return stateCopy;
+        case 'phone-number':
+          stateCopy.generalInfo['phoneNumber'] = e.target.value;
+          return stateCopy;
+        default:
+          return;
+      }
+    });
+  };
 
   submitFormData = (e) => {
     e.preventDefault();
@@ -35,34 +53,29 @@ class App extends Component {
       return;
     }
     this.setState(function (state) {
+      let stateCopy = JSON.parse(JSON.stringify(this.state));
       switch (e.target.id) {
         case 'general-info-form':
-          return {
-            generalInfo: infoArray,
-            experienceInfo: state.experienceInfo,
-            educationalInfo: state.educationalInfo,
-            generalInfoForm: false,
-            experienceInfoForm: state.experienceInfoForm,
-            educationalInfoForm: state.educationalInfoForm,
-          };
-        case 'educational-info-form':
-          return {
-            generalInfo: state.generalInfo,
-            experienceInfo: infoArray,
-            educationalInfo: state.educationalInfo,
-            generalInfoForm: state.generalInfoForm,
-            experienceInfoForm: state.experienceInfoForm,
-            educationalInfoForm: false,
-          };
-        case 'experience-info-form':
-          return {
-            generalInfo: state.generalInfo,
-            experienceInfo: state.experienceInfo,
-            educationalInfo: infoArray,
-            generalInfoForm: state.generalInfoForm,
-            experienceInfoForm: false,
-            educationalInfoForm: state.educationalInfoForm,
-          };
+          stateCopy['generalInfoSubmitted'] = !stateCopy[
+            'generalInfoSubmitted'
+          ];
+          return stateCopy;
+        default:
+          return;
+      }
+    });
+  };
+
+  bringUpInputs = (e) => {
+    e.preventDefault();
+    this.setState(function (state) {
+      let stateCopy = JSON.parse(JSON.stringify(this.state));
+      switch (e.target.id) {
+        case 'edit-general-info':
+          stateCopy['generalInfoSubmitted'] = !stateCopy[
+            'generalInfoSubmitted'
+          ];
+          return stateCopy;
         default:
           return;
       }
@@ -75,32 +88,48 @@ class App extends Component {
         <div className="title">REACT CV App</div>
         <div className="container">
           <div className="cv-block">
-            {this.state.generalInfoForm ? (
-              <div className="generalInfo-block">
+            <div className="general-info-block">
+              {!this.state.generalInfoSubmitted ? (
                 <form onSubmit={this.submitFormData} id="general-info-form">
                   <label htmlFor="first-name">First Name:</label>
-                  <input id="first-name" />
+                  <input
+                    onChange={this.updateInfo}
+                    id="first-name"
+                    value={this.state['generalInfo']['firstName']}
+                  />
                   <label htmlFor="last-name">Last Name:</label>
-                  <input id="last-name" />
+                  <input
+                    onChange={this.updateInfo}
+                    id="last-name"
+                    value={this.state['generalInfo']['lastName']}
+                  />
                   <label htmlFor="email">Email:</label>
-                  <input id="email" />
+                  <input
+                    onChange={this.updateInfo}
+                    id="email"
+                    value={this.state['generalInfo']['email']}
+                  />
                   <label htmlFor="phone-number">Phone Number:</label>
-                  <input id="phone-number" />
+                  <input
+                    onChange={this.updateInfo}
+                    id="phone-number"
+                    value={this.state['generalInfo']['phoneNumber']}
+                  />
                   <button>Submit</button>
+                  <hr />
                 </form>
-                <hr />
-              </div>
-            ) : (
-              <div>
-                <GeneralInfo formInfo={this.state.generalInfo} />
-                <button>Edit</button>
-                <hr />
-              </div>
-            )}
-            <div className="educationalInfo-block">
-              <EducationalInfo />
+              ) : (
+                <div>
+                  <GeneralInfo
+                    formInfo={Object.values(this.state.generalInfo)}
+                  />
+                  <button id="edit-general-info" onClick={this.bringUpInputs}>
+                    Edit
+                  </button>
+                  <hr />
+                </div>
+              )}
             </div>
-            <div className="experience-block">{<ExperienceInfo />}</div>
           </div>
         </div>
       </div>
