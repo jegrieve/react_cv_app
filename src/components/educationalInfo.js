@@ -1,17 +1,20 @@
 import React from 'react';
+import uniqid from 'uniqid';
 
-const EducationalInfo = () => {
+const EducationalInfo = (props) => {
+  let tags = ['School Name: ', 'Title of Study: ', 'Date of Completion: '];
+  const { formInfo } = props;
+
   return (
     <div>
-      <form>
-        <div>stuff1</div>
-        <div>stuff2</div>
-        <div>stuff3</div>
-        <div>stuff4</div>
-        <div>stuff5</div>
-        <button>Submit</button>
-      </form>
-      <hr></hr>
+      {formInfo.map((data, i) => {
+        return (
+          <div>
+            <span className="bold-font">{tags[i]}</span>
+            <span key={uniqid()}>{data}</span>
+          </div>
+        );
+      })}
     </div>
   );
 };

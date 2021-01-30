@@ -1,16 +1,26 @@
 import React from 'react';
+import uniqid from 'uniqid';
 
-const ExperienceInfo = () => {
+const ExperienceInfo = (props) => {
+  let tags = [
+    'Company Name: ',
+    'Position at Company: ',
+    'Tasks at Job: ',
+    'Start date: ',
+    'End date: ',
+  ];
+  const { formInfo } = props;
+
   return (
     <div>
-      <form>
-        <div>stuff1</div>
-        <div>stuff2</div>
-        <div>stuff3</div>
-        <div>stuff4</div>
-        <div>stuff5</div>
-        <button>Submit</button>
-      </form>
+      {formInfo.map((data, i) => {
+        return (
+          <div>
+            <span className="bold-font">{tags[i]}</span>
+            <span key={uniqid()}>{data}</span>
+          </div>
+        );
+      })}
     </div>
   );
 };
