@@ -9,9 +9,9 @@ const EducationalInfo = (props) => {
     <div>
       {formInfo.map((data, i) => {
         return (
-          <div>
+          <div key={uniqid()}>
             <span className="bold-font">{tags[i]}</span>
-            <span key={uniqid()}>{data}</span>
+            <span>{data}</span>
           </div>
         );
       })}
